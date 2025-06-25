@@ -19,4 +19,10 @@ require('lazy').setup({ { import = 'jim.plugins' }, { import = 'jim.plugins.lsp'
   change_detection = {
     notify = false,
   },
+  opts = {
+    rocks = {
+      hererocks = false,
+      enabled = false,
+    },
+  },
 })
