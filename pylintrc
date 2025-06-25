@@ -1,0 +1,16 @@
+[MASTER]
+# Don’t try to lint files inside your virtualenv folder
+ignore=.venv
+
+# Before doing any import‐analysis, add your local venv’s site-packages to sys.path
+init-hook=
+    import sys, itertools
+    from pathlib import Path
+    # find the first matching site-packages directory under .venv/lib
+    venv_site = next((
+      p for p in Path.cwd().glob('.venv/lib/*/site-packages')
+      if p.is_dir()
+    ), None)
+    if venv_site is not None:
+        sys.path.insert(0, str(venv_site))
+
