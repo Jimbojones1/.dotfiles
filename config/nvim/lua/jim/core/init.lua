@@ -1,2 +1,34 @@
-require("jim/core.options")
-require("jim/core.keymaps")
+require 'jim/core.options'
+require 'jim/core.keymaps'
+
+-- in your init.lua or colorscheme setup
+-- local function set_terminal_cursor(color)
+--   -- OSC 12 ; <color> BEL
+--   local seq = string.format('\27]12;%s\7', color)
+--   -- write directly to the terminal (not to the buffer)
+--   vim.api.nvim_chan_send(vim.v.stderr, seq)
+-- end
+--
+-- -- when Gruvbox loads:
+-- vim.api.nvim_create_autocmd('ColorScheme', {
+--   pattern = 'gruvbox',
+--   callback = function()
+--     set_terminal_cursor '#FABD2F' -- bright Gruvbox yellow
+--   end,
+-- })
+--
+-- -- when TokyoNight loads:
+-- vim.api.nvim_create_autocmd('ColorScheme', {
+--   pattern = 'tokyonight',
+--   callback = function()
+--     set_terminal_cursor '#FFD700' -- harvest-gold
+--   end,
+-- })
+--
+-- -- when Everforest loads:
+-- vim.api.nvim_create_autocmd('ColorScheme', {
+--   pattern = 'everforest',
+--   callback = function()
+--     set_terminal_cursor '#FF6E40' -- sunrise-coral
+--   end,
+-- })
