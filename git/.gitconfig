@@ -1,0 +1,8 @@
+[core]
+	excludesfile = /Users/jameshaff/.gitignore_global
+[user]
+	name = jimbojones1
+	emal = jimmyhaff3@gmail.com\n
+	email = jimmyhaff3@gmail.com
+[url "git@github.com:"]
+	insteadOf = https://github.com/

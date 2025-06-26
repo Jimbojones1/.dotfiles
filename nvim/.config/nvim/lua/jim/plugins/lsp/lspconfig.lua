@@ -81,7 +81,18 @@ return {
     -- Python (Pyright)
     vim.lsp.config('pyright', {
       capabilities = capabilities,
-      settings = { python = { analysis = { autoSearchPaths = true, diagnosticMode = 'openFilesOnly', useLibraryCodeForTypes = true } } },
+      settings = {
+        python = {
+          analysis = {
+            typeCheckingMode = 'standard',
+            autoSearchPaths = true,
+            diagnosticMode = 'openFilesOnly',
+            reportOptionalMemberAccess = false,
+            useLibraryCodeForTypes = true,
+            reportOptionalSubscript = false,
+          },
+        },
+      },
     })
     -- Node/TypeScript (tsserver)
     vim.lsp.config('tsserver', {
