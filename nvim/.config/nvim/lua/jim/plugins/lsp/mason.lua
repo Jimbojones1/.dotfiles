@@ -2,7 +2,6 @@ return {
   'williamboman/mason.nvim',
   dependencies = {
     'williamboman/mason-lspconfig.nvim',
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
   },
   config = function()
     -- import mason
@@ -10,8 +9,6 @@ return {
 
     -- import mason-lspconfig
     local mason_lspconfig = require 'mason-lspconfig'
-
-    local mason_tool_installer = require 'mason-tool-installer'
 
     -- enable mason and configure icons
     mason.setup {
@@ -27,10 +24,11 @@ return {
     mason_lspconfig.setup {
       -- list of servers for mason to install
       ensure_installed = {
+        'ts_ls',
         'html',
         'cssls',
         'tailwindcss',
-        'gopls',
+        'svelte',
         'lua_ls',
         'graphql',
         'emmet_ls',
@@ -38,18 +36,399 @@ return {
         'pyright',
       },
     }
-
-    mason_tool_installer.setup {
-      ensure_installed = {
-        'prettier', -- prettier formatter
-        'stylua', -- lua formatter
-        'isort', -- python formatter
-        'black', -- python formatter
-        'gofumpt',
-        'pylint',
-        'eslint_d',
-        'golangci-lint',
-      },
-    }
   end,
 }
+
+-- return {
+--   'williamboman/mason.nvim',
+--   dependencies = {
+--     'williamboman/mason-lspconfig.nvim', -- bridge between Mason and nvim-lspconfig
+--     'WhoIsSethDaniel/mason-tool-installer.nvim',
+--   },
+--   config = function()
+--     ---------------------------------------------------------------------------
+--     -- Imports
+--     ---------------------------------------------------------------------------
+--     local mason = require 'mason'
+--     local mason_lspconfig = require 'mason-lspconfig'
+--     local mason_tools = require 'mason-tool-installer'
+--     local lspconfig = require 'lspconfig'
+--     local capabilities = require('cmp_nvim_lsp').default_capabilities()
+--
+--     ---------------------------------------------------------------------------
+--     -- Mason UI
+--     ---------------------------------------------------------------------------
+--     mason.setup {
+--       ui = {
+--         icons = {
+--           package_installed = '✓',
+--           package_pending = '➜',
+--           package_uninstalled = '✗',
+--         },
+--       },
+--     }
+--
+--     ---------------------------------------------------------------------------
+--     -- Ensure language-servers are installed (Mason will handle the binaries)
+--     ---------------------------------------------------------------------------
+--     mason_lspconfig.setup {
+--       ensure_installed = {
+--         'html',
+--         'cssls',
+--         'tailwindcss',
+--         'gopls',
+--         'lua_ls',
+--         'graphql',
+--         'emmet_ls',
+--         'prismals',
+--         'pyright',
+--         'ts_ls', -- TypeScript / JavaScript
+--       },
+--       automatic_installation = true,
+--       -- Disable mason‑lspconfig's auto-setup for ts_ls; we'll configure it manually below
+--     }
+--
+--     ---------------------------------------------------------------------------
+--     -- Manual LSP setup for TypeScript (new server name is `ts_ls`)
+--     ---------------------------------------------------------------------------
+--     -- lspconfig.ts_ls.setup {
+--     --   cmd = {
+--     --     vim.fn.stdpath 'data' .. '/mason/bin/typescript-language-server',
+--     --     '--stdio',
+--     --   },
+--     --   root_dir = lspconfig.util.root_pattern('tsconfig.json', 'package.json', '.git'),
+--     --   capabilities = capabilities,
+--     --   on_attach = function(client, _)
+--     --     -- Disable tsserver formatting if you use prettier/eslint
+--     --     client.server_capabilities.documentFormattingProvider = false
+--     --   end,
+--     -- }
+--
+--     ---------------------------------------------------------------------------
+--     -- External formatters / linters (installed via Mason)
+--     ---------------------------------------------------------------------------
+--     mason_tools.setup {
+--       ensure_installed = {
+--         -- Formatters
+--         'prettier',
+--         'stylua',
+--         'isort',
+--         'black',
+--         'gofumpt',
+--         -- Linters / diagnostics
+--         'pylint',
+--         'eslint_d',
+--         'golangci-lint',
+--       },
+--     }
+--   end,
+-- }
+--
+
+-- return {
+--   'williamboman/mason.nvim',
+--   dependencies = {
+--     'williamboman/mason-lspconfig.nvim', -- bridge between Mason and nvim-lspconfig
+--     'WhoIsSethDaniel/mason-tool-installer.nvim',
+--   },
+--   config = function()
+--     ---------------------------------------------------------------------------
+--     -- Imports
+--     ---------------------------------------------------------------------------
+--     local mason = require 'mason'
+--     local mason_lspconfig = require 'mason-lspconfig'
+--     local mason_tools = require 'mason-tool-installer'
+--     local lspconfig = require 'lspconfig'
+--     local capabilities = require('cmp_nvim_lsp').default_capabilities()
+--
+--     ---------------------------------------------------------------------------
+--     -- Mason UI
+--     ---------------------------------------------------------------------------
+--     mason.setup {
+--       ui = {
+--         icons = {
+--           package_installed = '✓',
+--           package_pending = '➜',
+--           package_uninstalled = '✗',
+--         },
+--       },
+--     }
+--
+--     ---------------------------------------------------------------------------
+--     -- Ensure language-servers are installed (Mason will handle the binaries)
+--     ---------------------------------------------------------------------------
+--     mason_lspconfig.setup {
+--       ensure_installed = {
+--         'html',
+--         'cssls',
+--         'tailwindcss',
+--         'gopls',
+--         'lua_ls',
+--         'graphql',
+--         'emmet_ls',
+--         'prismals',
+--         'pyright',
+--         'ts_ls', -- TypeScript / JavaScript
+--       },
+--       automatic_installation = true,
+--     }
+--
+--     ---------------------------------------------------------------------------
+--     -- Manual LSP setup for TypeScript (new server name is `ts_ls`)
+--     ---------------------------------------------------------------------------
+--     lspconfig.ts_ls.setup {
+--       cmd = {
+--         vim.fn.stdpath 'data' .. '/mason/bin/typescript-language-server',
+--         '--stdio',
+--       },
+--       root_dir = lspconfig.util.root_pattern('tsconfig.json', 'package.json', '.git'),
+--       capabilities = capabilities,
+--       on_attach = function(client, _)
+--         -- Disable tsserver formatting if you use prettier/eslint
+--         client.server_capabilities.documentFormattingProvider = false
+--       end,
+--     }
+--
+--     ---------------------------------------------------------------------------
+--     -- External formatters / linters (installed via Mason)
+--     ---------------------------------------------------------------------------
+--     mason_tools.setup {
+--       ensure_installed = {
+--         -- Formatters
+--         'prettier',
+--         'stylua',
+--         'isort',
+--         'black',
+--         'gofumpt',
+--         -- Linters / diagnostics
+--         'pylint',
+--         'eslint_d',
+--         'golangci-lint',
+--       },
+--     }
+--   end,
+-- }
+
+--     local mason_tools = require 'mason-tool-installer'
+--     local lspconfig = require 'lspconfig'
+--     local capabilities = require('cmp_nvim_lsp').default_capabilities()
+--
+--     ---------------------------------------------------------------------------
+--     -- Mason UI
+--     ---------------------------------------------------------------------------
+--     mason.setup {
+--       ui = {
+--         icons = {
+--           package_installed = '✓',
+--           package_pending = '➜',
+--           package_uninstalled = '✗',
+--         },
+--       },
+--     }
+--
+--     ---------------------------------------------------------------------------
+--     -- Ensure language‑servers are installed (Mason will handle the binaries)
+--     ---------------------------------------------------------------------------
+--     mason_lspconfig.setup {
+--       ensure_installed = {
+--         'html',
+--         'cssls',
+--         'tailwindcss',
+--         'gopls',
+--         'lua_ls',
+--         'graphql',
+--         'emmet_ls',
+--         'prismals',
+--         'pyright',
+--         'ts_ls', -- TypeScript / JavaScript
+--       },
+--       automatic_installation = true,
+--     }
+--
+--     ---------------------------------------------------------------------------
+--     -- Manual LSP setup for TypeScript (older Mason‑LSPConfig ≠ `setup_handlers`)
+--     -- This bypasses Mason‑LSPConfig's auto‑setup and gives us full control.
+--     ---------------------------------------------------------------------------
+--     lspconfig.tsserver.setup {
+--       cmd = {
+--         vim.fn.stdpath 'data' .. '/mason/bin/typescript-language-server',
+--         '--stdio',
+--       },
+--       root_dir = lspconfig.util.root_pattern('tsconfig.json', 'package.json', '.git'),
+--       capabilities = capabilities,
+--       on_attach = function(client, _)
+--         -- Disable tsserver formatting if you use prettier/eslint elsewhere
+--         client.server_capabilities.documentFormattingProvider = false
+--       end,
+--     }
+--
+--     ---------------------------------------------------------------------------
+--     -- External formatters / linters (installed via Mason)
+--     ---------------------------------------------------------------------------
+--     mason_tools.setup {
+--       ensure_installed = {
+--         -- Formatters
+--         'prettier',
+--         'stylua',
+--         'isort',
+--         'black',
+--         'gofumpt',
+--         -- Linters / diagnostics
+--         'pylint',
+--         'eslint_d',
+--         'golangci-lint',
+--       },
+--     }
+--   end,
+
+--   },
+--   config = function()
+--     local mason = require 'mason'
+--     local mlc = require 'mason-lspconfig'
+--     local mason_tools = require 'mason-tool-installer'
+--     local lspconfig = require 'lspconfig'
+--     local caps = require('cmp_nvim_lsp').default_capabilities()
+--
+--     mason.setup {
+--       ui = {
+--         icons = {
+--           package_installed = '✓',
+--           package_pending = '➜',
+--           package_uninstalled = '✗',
+--         },
+--       },
+--     }
+--
+--     -- ensure these LSP servers are installed
+--     mlc.setup {
+--       ensure_installed = {
+--         'html',
+--         'cssls',
+--         'tailwindcss',
+--         'gopls',
+--         'lua_ls',
+--         'graphql',
+--         'emmet_ls',
+--         'prismals',
+--         'pyright',
+--         'ts_ls',
+--       },
+--       automatic_installation = true,
+--     }
+--
+--     -- register default handler + custom ts_ls handler
+--     mlc.setup_handlers {
+--       -- 1) default handler for all servers
+--       function(server_name)
+--         lspconfig[server_name].setup { capabilities = caps }
+--       end,
+--       -- 2) override for ts_ls
+--       ['ts_ls'] = function()
+--         lspconfig.tsserver.setup {
+--           cmd = {
+--             vim.fn.stdpath 'data' .. '/mason/bin/typescript-language-server',
+--             '--stdio',
+--           },
+--           root_dir = lspconfig.util.root_pattern('tsconfig.json', 'package.json', '.git'),
+--           capabilities = caps,
+--           on_attach = function(client, bufnr)
+--             client.server_capabilities.documentFormattingProvider = false
+--           end,
+--         }
+--       end,
+--     }
+--
+--     -- ensure external formatters/linters
+--     mason_tools.setup {
+--       ensure_installed = {
+--         'prettier',
+--         'stylua',
+--         'isort',
+--         'black',
+--         'gofumpt',
+--         'pylint',
+--         'eslint_d',
+--         'golangci-lint',
+--       },
+--     }
+--   end,
+-- }
+--
+-- return {
+--   'williamboman/mason.nvim',
+--   dependencies = {
+--     'williamboman/mason-lspconfig.nvim',
+--     'WhoIsSethDaniel/mason-tool-installer.nvim',
+--   },
+--   config = function()
+--     -- import mason
+--     local mason = require 'mason'
+--
+--     -- import mason-lspconfig
+--     local mason_lspconfig = require 'mason-lspconfig'
+--
+--     local mason_tool_installer = require 'mason-tool-installer'
+--
+--     local lspconfig = require 'lspconfig'
+--     local caps = require('cmp_nvim_lsp').default_capabilities()
+--
+--     -- enable mason and configure icons
+--     mason.setup {
+--       ui = {
+--         icons = {
+--           package_installed = '✓',
+--           package_pending = '➜',
+--           package_uninstalled = '✗',
+--         },
+--       },
+--     }
+--
+--     mason_lspconfig.setup {
+--       -- list of servers for mason to install
+--       ensure_installed = {
+--         'html',
+--         'cssls',
+--         'tailwindcss',
+--         'gopls',
+--         'lua_ls',
+--         'graphql',
+--         'emmet_ls',
+--         'prismals',
+--         'pyright',
+--         'ts_ls',
+--       },
+--       automatic_installation = true,
+--       handlers = {
+--         -- default handler for all other servers
+--         function(server_name)
+--           require('mason-lspconfig').setup_handlers['default'](server_name)
+--         end,
+--         -- custom handler for tsserver
+--         ['tsserver'] = function()
+--           lspconfig.tsserver.setup {
+--             cmd = { vim.fn.stdpath 'data' .. '/mason/bin/typescript-language-server', '--stdio' },
+--             root_dir = lspconfig.util.root_pattern('tsconfig.json', 'package.json', '.git'),
+--             capabilities = caps,
+--             on_attach = function(client, bufnr)
+--               -- disable formatting if you use prettier/eslint
+--               client.server_capabilities.documentFormattingProvider = false
+--             end,
+--           }
+--         end,
+--       },
+--     }
+--
+--     mason_tool_installer.setup {
+--       ensure_installed = {
+--         'prettier', -- prettier formatter
+--         'stylua', -- lua formatter
+--         'isort', -- python formatter
+--         'black', -- python formatter
+--         'gofumpt',
+--         'pylint',
+--         'eslint_d',
+--         'golangci-lint',
+--       },
+--     }
+--   end,
+-- }

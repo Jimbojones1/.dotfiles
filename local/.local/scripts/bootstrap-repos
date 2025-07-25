@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+#
+# bootstrap-repos  –  initialise & push local dirs to GitHub Enterprise
+#
+# Prerequisites
+#   • gh CLI already authenticated for git.generalassemb.ly
+#   • git installed
+#
+# Usage
+#   bootstrap-repos dir1 dir2 …          # push each listed folder
+#   bootstrap-repos *                    # push every folder in the cwd
+
+set -euo pipefail
+
+HOST="git.generalassemb.ly"
+ORG="Deloitte-AI-and-Data-Bootcamp"
+
+if [[ $# -eq 0 ]]; then
+  echo "Usage: $0 <folder> [folder …]" >&2
+  exit 1
+fi
+
+for dir in "$@"; do
+  [[ -d $dir ]] || { echo "❌  $dir is not a directory – skipping"; continue; }
+
+  repo="$(basename "$dir")"
+  (
+    cd "$dir"
+
+    # 1 ▪ Initialise if needed
+    if [[ ! -d .git ]]; then
+      echo "🆕  Initialising $repo"
+      git init -q
+    fi
+
+    # 2 ▪ Stage everything
+    git add .
+
+    # 3 ▪ Commit only if there’s nothing yet
+    if ! git rev-parse --quiet --verify HEAD >/dev/null; then
+      git commit -m "Initial commit"
+    fi
+
+    # 4 ▪ Create the remote repo if it doesn’t exist
+    if ! gh repo view "$ORG/$repo" --hostname "$HOST" &>/dev/null; then
+      echo "📌  Creating $ORG/$repo on $HOST"
+      gh repo create "$ORG/$repo" \
+        --internal \
+        --source . \
+        --remote origin \
+        --push 
+    else
+      # Add remote if missing, then push
+      if ! git remote | grep -q '^origin$'; then
+        git remote add origin "git@$HOST:$ORG/$repo.git"
+      fi
+      echo "🔄  Pushing $repo"
+      git push -u origin main   # change ‘main’ if your default branch differs
+    fi
+  )
+done
+

@@ -19,8 +19,10 @@ return {
     -- Keymaps on LspAttach
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+
       callback = function(ev)
         local opts = { buffer = ev.buf, silent = true }
+
         keymap.set('n', 'gR', '<cmd>Telescope lsp_references<CR>', opts)
         keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
         keymap.set('n', 'gd', '<cmd>Telescope lsp_definitions<CR>', opts)
@@ -66,7 +68,7 @@ return {
     -- GraphQL
     vim.lsp.config('graphql', {
       capabilities = capabilities,
-      filetypes = { 'graphql', 'gql', 'svelte', 'typescriptreact', 'javascriptreact' },
+      filetypes = { 'graphql', 'gql', 'svelte' },
     })
     -- Emmet
     vim.lsp.config('emmet_ls', {
@@ -94,12 +96,10 @@ return {
         },
       },
     })
-    -- Node/TypeScript (tsserver)
-    vim.lsp.config('tsserver', {
-      capabilities = capabilities,
-      on_attach = function(client, bufnr)
-        client.server_capabilities.documentFormattingProvider = false
-      end,
+
+    vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+      border = 'rounded',
+      max_width = 100,
     })
   end,
 }

@@ -1,6 +1,18 @@
 require 'jim.core'
 require 'jim.lazy'
 
+do
+  local orig = vim.lsp.util.open_floating_preview
+
+  ---@diagnostic disable-next-line: duplicate-set-field
+  function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+    opts = opts or {}
+    opts.border = opts.border or 'rounded'
+    opts.max_width = opts.max_width or 100
+    return orig(contents, syntax, opts, ...)
+  end
+end
+-- ------
 -- helper to pick up ./venv/bin/python if it exists
 local function detect_venv_python()
   local cwd = vim.fn.getcwd()
