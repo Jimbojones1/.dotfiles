@@ -62,7 +62,7 @@ export PATH="/opt/homebrew/opt/binutils/bin:$PATH"
 export PATH="$HOME/.local/scripts:$PATH"
 eval "$(mise activate zsh)"
 export PATH="$PATH:$HOME/go/bin"
-export GEMINI_API_KEY=AIzaSyBoe8eiANlMBuEAm4YsgvxxdMSrADBXJAY
+
 
 # bind keys
 zle -N fzfunc
